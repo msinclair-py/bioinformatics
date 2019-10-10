@@ -4,24 +4,22 @@ import requests
 url = 'http://www.rcsb.org/pdb/rest/search'
  
 queryText =
+<?xml version="1.0" encoding="UTF=8">
 <orgPdbQuery>
-<queryType>org.pdb.query.simple.MolecularWeightQuery</queryType>
-<description>Molecular Weight Search : Min Molecular Weight=11000.0 Max Molecular Weight=37000.0</description>
-<entity.formula_weight.min>11000</entity.formula_weight.min>
-<entity.formula_weight.max>37000</entity.formula_weight.max>
+   <version>B0907</version>
+   <and-query>
+      <query>
+         <queryType>org.pdb.query.simple.MolecularWeightQuery</queryType>
+         <entity.formula_weight.min>11000</entity.formula_weight.min>
+         <entity.formula_weight.max>37000</entity.formula_weight.max>
+      </query>
+      <query>
+         <queryType>org.pdb.query.simple.BiolUnitQuery</queryType>
+         <oligomeric_statemin>1</oligomeric_statemin>
+         <oligomeric_statemax>6</oligomeric_statemax>
+      </query>
+   </and-query>
 </orgPdbQuery>
-
-query2 =
-<orgPdbQuery>
-<queryType>org.pdb.query.simple.ChainTypeQuery</queryType>
-<description>Chain Type Search : Contains Protein=Y, Contains DNA=N, Contains RNA=N, Contains DNA/RNA Hybrid=N</description>
-<containsProtein>Y</containsProtein>
-<containsDna>N</containsDna>
-<containsRna>N</containsRna>
-<containsHybrid>N</containsHybrid>
-</orgPdbQuery>
- 
-
 
 print("query:\n" + queryText)
 print("querying PDB...\n")
