@@ -1,0 +1,51 @@
+######Required Software to execute the codes herein#####
+#Note: this assumes you are working in a linux or other unix environment
+#and already have bash installed on a terminal. There is a sample 
+#bash_aliases file that will ensure that everything gets called correctly.
+#This file should be copied into your home directory and be modified as necessary
+#if the path to each program is different in your filesystem (this may be true for 
+#SURF/VASP). VMD and python should be ok but check anyways to be sure. To check for
+#an alias file try: ls ~/.bash_aliases    if nothing comes up then you don't have
+#one and need to create one (NOTE: it must begin with a period '.'). After modifying/
+#creating an alias file type into your terminal: source ~/.bashrc
+
+###surfView/Wine
+#surfView.exe is on the Brian Chen lab website
+#wine is missing glut32.dll libraries on fresh install
+#download winetricks from github:
+#wget https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
+#and make it executable: chmod +x winetricks
+#run it, following menus to install glut library
+#surfView can not be run through wine on linux
+
+###SURF/VASP
+#out of the box VASP and SURF will not compile
+#due to errors in the code on the Brian Chen
+#lab website. the makefile in both are the culprit.
+
+#for SURF the following lines should look like:
+
+#CC = gcc
+#CXX = g++
+#CPPFLAGS = -g -pedantic -Wall -Wno-deprecated -Wparentheses
+#CFLAGS = -g
+
+#for VASP:
+
+#CC = gcc -m64
+#CXX = g++ -m64
+#CPPFLAGS = -g -pedantic -pedantic-errors -Wall -Wno-depecrated
+#CFLAGS = -g -fPIC
+
+###VMD
+#located on ks.uiuc website just download the latest stable release
+#for linux.
+
+###Python 3 + packages
+#make sure you have python 3.5 or newer installed NOT 2.7 or 3.4
+#there are several python packages that you may or may not already
+#have installed. it is recommended to use a python installation
+#such as anaconda to cover your bases but if you have a minimal installation
+#the following packages must be installed: biopython, urllib3, itertools,
+#numpy, scipy
+#To install python packages use: pip -install packegename
