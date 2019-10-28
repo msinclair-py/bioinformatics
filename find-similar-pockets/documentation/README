@@ -1,0 +1,30 @@
+###Starting structure is Nitrogenase MoFe 1m1n.pdb
+###The initial structure is a homo-4mer and has been reduced
+###to chain C for pocket search in nitrogenase.pdb
+###using atomselections in the TK console of VMD
+
+###Pocket 1 from fpocket is site of FeMoCo with a small piece
+###of homocitrate poking into pocket 14
+
+
+###Workflow is as follows
+
+###run setup.py in order to populate the initial_structures directory with
+###the target pocket and its subsequent rotations
+
+###acquire master pdb list from RCSB and name pdb_list.txt. put
+###in the sublist directory before running sublist.py. if you want
+###to changed the number of structures per sublist there is a variable,
+###n, in the sublist script that can be changed.
+
+###run the search-for-pockets bash script which will do all the heavy lifting
+###details of the scripts it calls are located inside the script file and more
+###detailed descriptions can be found in the README file in the scripts directory
+
+###pose files get outputted to the rosetta directory
+
+###pdb candidates that pass the first fpocket filter will be located in the winners
+###directory. each subdirectory will contain only 100 structures and there is an
+###additional directory called scorefiles which will contain the score of each run
+###these directories are not correlated by number in any way so they may be difficult
+###to navigate

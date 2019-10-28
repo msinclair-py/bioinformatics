@@ -1,0 +1,4 @@
+alias vmd='/usr/local/bin/vmd'
+alias fpocket='~/Software/fpocket/bin/fpocket'
+alias vasp='~/Software/VASPreleasePack/codeRelease/vaspRelease/debug/vasp'
+alias surf='~/Software/VASPreleasePack/codeRelease/surfProcessingRelease/debug/surfProcessing'
