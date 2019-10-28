@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+###choose a sublist to download
+python get-pdbs.py
+
+###run candidates thru fpocket, clean up and center each
+./gen-pockets
+python pocket-finder.py
+vmd -dispdev text -e center.tcl -args 2 0
+python align-structures.py
+
+###generate surf files
+./compare
+
+###analyse VASP output
+python get-score-file.py
+
+###generate pose files for rosetta
+python rosetta_prep.py
+
+###move successful pdbs to winners archive, append new scores to
+###master scorefile, and clear out the VASP folder for the next round
+python move-good-pdbs.py

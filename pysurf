@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+#import bash aliases to call surf correctly
+shopt -s expand_aliases
+source ~/.bash_aliases
+
+#run surf for each rotation/tilt
+for i in $(ls ../initial_structures/*tilt*); do
+	b="$(cut -d '_' -f3 <<< "$i")"
+	c="$(cut -d '_' -f4 <<< "$i")"
+	surf -surfProbeGen $i ../initial_structures/$b.$c.SURF 3 .5
+done
+
+#get the volume of just 1 orientation for reference
+surf -surveyVolume ../initial_structures/0.notilt.SURF > ../initial_structures/vol.txt

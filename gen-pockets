@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+###This top block of code just runs fpocket iteratively over
+###all available PDB's in the PDB directory
+for i in $(ls ../PDB/); do
+	fpocket -f ../PDB/$i -i 80
+done
+
+###This block detects which fpocket outputs don't have pockets
+###and deletes their respective directories
+shopt -s nullglob
+for d in ../PDB/*/pockets/; do
+   set -- "$d"/*
+   (( $# )) && continue
+   rm -rf -- "${d%/pockets/}"
+done
+
+###call the python function to clear out the unused pdbs
+function call_python { python cleanup-pdbs.py; }
+call_python

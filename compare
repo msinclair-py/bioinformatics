@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+#need to import aliases into script
+shopt -s expand_aliases
+source ~/.bash_aliases
+
+#does the VASP pockets directory 
+if [ -d "../VASP/pockets" ]
+then
+	echo "Pocket directory exists"
+else
+	mkdir ../VASP/pockets
+fi
+
+#perform SURF on each centered pocket. b variable
+#is a subslice of the i variable name to remove the
+#pathing so that it the correct pdb name can be
+#used for the output of surfProcessing
+for i in $(ls ../PDB/*.aligned); do
+	b=${i:12:10}
+	surf -surfProbeGen $i ../VASP/pockets/$b.SURF 3 .5
+done
+
+#perform vasp for both the target pocket and each entry
+#pocket has been named generically so this script can be 
+#implemented on other systems in a less confusing manner
+for i in $(ls ../VASP/pockets/*.SURF); do
+   b=${i:16:10}
+	for j in $(ls ../initial_structures/*tilt*.SURF); do
+		c="$(cut -d'/' -f3 <<<"$j")"
+ 		vasp -csg $j $i I ../VASP/"$b".intersect."$c" .5
+	done
+done
+
+#check to see if scores folder exists before exporting
+#scores. if it doesn't exits, create it
+if [ -d "../VASP/scores" ]
+then
+	echo "Scores directory exists"
+else
+	mkdir ../VASP/scores
+fi
+
+echo "Extracting Scores"
+#get the volumes of resulting surfaces
+for i in $(ls ../VASP/*.intersect*); do
+   b=${i:8:4}
+	c="$(cut -d'/' -f3 <<<"$i")"
+	e="$(cut -d'.' -f1 <<<"$c")"
+	f="$(cut -d'.' -f2 <<<"$c")"
+	g="$(cut -d'.' -f3 <<<"$c")"
+	h="$(cut -d'.' -f4 <<<"$c")"
+   surf -surveyVolume $i > ../VASP/scores/"$e"_"$f"_"$g"_"$h"_iscore.txt
+done
+
+#get the volume of each pocket
+for i in $(ls ../VASP/pockets/*.SURF); do
+	b=${i:16:4}
+	p=${i:21:5}
+	surf -surveyVolume ../VASP/pockets/$b\_$p.SURF > ../VASP/pockets/$b\_$p.vol.txt
+done

@@ -1,0 +1,57 @@
+###Scripts in this directory###
+#
+##setup.py
+#
+#sets the initial structures up based on some user inputs, calls pysurf
+#bash script to get surfaces of rotations and volume text file
+#
+##sublist.py
+#
+#breaks up the master pdb list into smaller sublists
+#
+##get-pdbs.py
+#
+#downloads a set of pdbs given by a designated sublist.txt file
+#
+##gen-pockets
+#
+#bash script that iteratively runs fpocket over the whole PDB directory
+#and then finds which entries don't have pockets and deletes their output
+#directory. finally cleanup-pdbs.py is called to remove the pdbs whose
+#outputs were deleted
+#
+##measure-sasa.tcl
+#
+#determines the solvent accessiblity of each pocket to be used as a 3rd filter
+#for pocket assessment
+#
+##pocket-finder.py
+#
+#detects pockets in the pdb file output of fpocket
+#excises them based on a size filter (number of pocket points)
+#able to sort out multiple pockets from a single input
+#
+##center.tcl
+#
+#recenters a pocket so that VASP analysis can be accurately done
+#
+##align-structures.py
+#
+#finds the longest axis in each pocket, passes this to align.tcl
+#
+##align.tcl
+#
+#does alignments for each pocket along the longest axis
+#
+##compare
+#
+#bash script that runs surf/vasp for each combo against the original
+#nitrogenase pocket. outputs scores to text file
+#
+##get-score-file.py
+#
+#integrates all scores into one file
+#
+##rosetta-prep.py
+#
+#generates a pose file for each passable structure meeting filter reqs
