@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+###choose mode of download
+echo "Which mode of PDB download would you like?"
+echo "1. Download 100 structures from a sublist"
+echo "2. Download 100 random structures from master list"
+echo "3. Skip download, use what is in PDB directory"
+read mode
+
+if [ $mode == 1 ]
+then
+	###choose a sublist to download
+	python get-pdbs.py
+elif [ $mode == 2 ]
+then
+	###choose 100 random structures
+	python pick-random-pdbs.py
+elif [ $mode == 3 ]
+then
+	break
+fi
+
+###switch to python 2.7 for prepare-pdbs.py
+source ~/anaconda3/etc/profile.d/conda.sh
+conda activate snakes
+python prepare-pdbs.py
+conda deactivate
+
+###run thru fpocket, clean up, center and align each pocket
+./gen-pockets
+python pocket-finder.py
+vmd -dispdev text -e center.tcl -args 2 0
+python align-structures.py
+
+###generate surf files
+python compare.py
+
+###analyse VASP output
+python get-score-file.py
+
+###generate pose files for rosetta
+python rosetta-prep.py
+
+###move successful pdbs to winners archive, append new scores to
+###master scorefile, and clear out the VASP folder for the next round
+#python move-good-pdbs.py
