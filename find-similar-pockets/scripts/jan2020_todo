@@ -1,0 +1,6 @@
+###need 2 translations
+###need to rotate around 180 and then do new rotations
+###eliminate VMD to the degree I can (rotation generation scripts)
+#fix <150 alpha sphere filter?
+#find out how to implement SASA analysis
+#more generic pathing

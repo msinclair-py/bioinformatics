@@ -1,0 +1,8 @@
+#working on gen-pockets.py
+#-> needs to clean up directory of structures w no pocket
+###01/2020###
+#removed vmd from things, all centering, rotations, alignment in python now
+#fixing downstream pathing due to new naming conventions to accomodate
+#translations and flipping
+#moved deprecated files to obsolete directory, including all tcl scripts
+#except for the measure sasa script (may still pursue this one)

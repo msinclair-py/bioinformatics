@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 
+###minimum alpha sphere filter
+alphas=80
+
 ###This top block of code just runs fpocket iteratively over
 ###all available PDB's in the PDB directory
-for i in $(ls ../PDB/); do
-	fpocket -f ../PDB/$i -i 80
+for i in $(ls ../PDB/*.pdb); do
+	fpocket -f ../PDB/$i -i $alphas
 done
 
 ###This block detects which fpocket outputs don't have pockets

@@ -29,7 +29,6 @@ conda deactivate
 ###run thru fpocket, clean up, center and align each pocket
 ./gen-pockets
 python pocket-finder.py
-vmd -dispdev text -e center.tcl -args 2 0
 python align-structures.py
 
 ###generate surf files

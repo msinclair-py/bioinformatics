@@ -11,9 +11,9 @@ for name in glob.glob('../PDB/*_out'):
 #This block looks for whether the pdb file has a matching
 #directory or not. PDB's without pockets should not have
 #directories and should be deleted by this script
-for name in glob.glob('../PDB/*.ent'):
-	pdb = name.split('/')
-	if pdb[2][:-4] not in names:
+for name in glob.glob('../PDB/*.pdb'):
+	pdb = name.split('/')[2][:-4]
+	if pdb not in names:
 		os.remove(name)
 	else:
 		continue

@@ -3,10 +3,11 @@ import numpy as np
 
 #filt is the percentage filter cutoff and hilt is the hit filter
 filt = .7
-hilt = 0
+hilt = 1
 
 lst = np.genfromtxt('../score.txt', dtype='unicode', skip_header=1,
 	usecols=(0,1,5,6))
+
 
 #using relevant score information including pdb id, pocket number, intersect 
 #percentage and number of orientation hits for the filter, get the unique
@@ -18,10 +19,10 @@ for i in range(len(lst)):
 		if float(lst[i][3]) > float(hilt):
 			a=lst[i][0]
 			b=lst[i][1][-1]
-			fil = f'../PDB/pdb{a}_out/pockets/pocket{b}_atm.pdb'
+			fil = f'../PDB/pdb{a}.ent_A_out/pockets/pocket{b}_atm.pdb'
 			pose_array = np.genfromtxt(fil, dtype='unicode', skip_header=20,
 				skip_footer=2, usecols=5)
-			
+
 			#go through pose_array and take only the unique entries
 			for i in range(len(pose_array)):
 				if pose_array[i] not in array:

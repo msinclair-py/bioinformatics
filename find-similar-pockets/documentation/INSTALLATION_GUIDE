@@ -9,6 +9,12 @@
 #one and need to create one (NOTE: it must begin with a period '.'). After modifying/
 #creating an alias file type into your terminal: source ~/.bashrc
 
+###fpocket 3.04
+#note: it is CRITICAL that you download fpocket 3.04 from github or it will find all
+#sorts of incorrect pockets with bad numbering of STP atoms. to do so on linux go to
+#https://github.com/Discngine/fpocket and follow the directions to install from github
+#an error we noticed is that some distros of linux are lacking the netcdf library for C
+
 ###surfView/Wine
 #surfView.exe is on the Brian Chen lab website
 #wine is missing glut32.dll libraries on fresh install

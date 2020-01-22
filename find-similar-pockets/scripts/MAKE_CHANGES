@@ -1,0 +1,17 @@
+#####IF YOU NEED TO MAKE ANY CHANGES TO STATIC VARIABLES######
+--------------------------------------------------------------
+###Filters:
+#Script: gen-pockets
+#minimum 80 alpha spheres in fpocket
+
+#Script: pocket-finder.py
+#maximum 150 STP atoms in pocket pdb
+
+#Script: get-score-file.py
+#filter for minimum intersect volume match; used to count number
+#of conformations that match that volume filter
+
+#Script: rosetta-prep.py
+#same intersect volume filter and additional hit filter, hilt, to 
+#only make pos files for matches that have enough intersect volume
+#and enough conformations that satisfy that percentage
