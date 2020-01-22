@@ -13,13 +13,13 @@ pdbs=[]
 inter=[]
 pockets=[]
 for name in glob.glob('../VASP/scores/*iscore.txt'):
-	raw_name.append(name.split('/')[3])
-	item = name.split('/')[3][:4]
+	item = name.split('/')[3]
+	raw_name.append(item)
 	if item not in pdbs:
-		pdbs.append(item)
+		pdbs.append(item.split('_')[0])
+
 for name in raw_name:
 	name_array.append(name.split('_'))
-
 
 print('-----Getting scores-----')
 #obtain all scores as well as names into a new array
@@ -31,9 +31,12 @@ for i, line in enumerate(name_array):
 		for line in ifile:
 			pass
 		iline = line.split()[3]
-		b=[(a[2].split('.')[0]), (a[2].split('.')[1])]
-		inter.append([a[0],a[1],b[0],b[1],iline])
+		inter.append([a[0],a[1],a[2],a[3],a[4],a[5],a[6],iline])
 		pockets.append([a[0],a[1]])
+
+#######NOTE: pockets positioning will NOT match inter array after sorting; should eliminate
+#######why do i use two arrays with identical information???? lets make it one array
+#######and then do all iterative operations at once
 
 #determine the highest intersect/lowest diff score
 print('-----Sorting scores-----')
@@ -48,7 +51,7 @@ with open('../initial_structures/vol.txt', 'r') as f:
 	vline = line.split()[-1]
 
 vols={}
-for p in pockets:
+for p in inter_sort:#pockets:
 	with open(f'../VASP/pockets/{p[0]}_{p[1]}.vol.txt', 'r') as f:
 		for line in f:
 			pass
@@ -63,26 +66,39 @@ for p in pockets:
 tracker=[]
 hits={}
 
-for j in range(len(pockets)):
+for j in range(len(inter_sort)):
 	count=0
-	for line in inter_sort:
-		if pockets[j][0] == line[0]:
-			if pockets[j][1] == line[1]:
-				if [line[0], line[1]] not in tracker:
-					tracker.append([line[0], line[1]])
-					inter_final.append(line)
-					if float(line[4])/float(vline) > float(filt):
-						count+=1
-				else:
-					if float(line[4])/float(vline) > float(filt):
-						count+=1
-	key = f'{pockets[j][0]} {pockets[j][1]}'
+	if [inter_sort[j][0],inter_sort[j][1]] not in tracker:
+		tracker.append([inter_sort[j][0],inter_sort[j][1]])
+		inter_final.append(inter_sort[j])
+	
+	if float(inter_sort[j][4])/float(vline) > float(filt):
+		count += 1
+	
+	key = f'{inter_sort[j][0]} {inter_sort[j][1]}'
 	hits.update({key : count})
 
-for line in inter_sort:
-	if pockets[2][0] == line[0]:
-		if pockets[2][1] == line[1]:
-			continue
+#	for line in inter_sort:
+#		if pockets[j][0] == line[0]:
+#			if pockets[j][1] == line[1]:
+#				if [line[0], line[1]] not in tracker:
+#					tracker.append([line[0], line[1]])
+#					inter_final.append(line)
+#					if float(line[4])/float(vline) > float(filt):
+#						count+=1
+#				else:
+#					if float(line[4])/float(vline) > float(filt):
+#						count+=1
+#	key = f'{pockets[j][0]} {pockets[j][1]}'
+#	hits.update({key : count})
+
+
+###what does this loop do?
+#for line in inter_sort:
+#	if pockets[2][0] == line[0]:
+#		if pockets[2][1] == line[1]:
+#			continue
+
 
 #put vline in score file and # of hits that satisfy filter
 #combine into output file
@@ -92,8 +108,8 @@ with open('../score.txt','w') as outfile:
 	for i in range(len(inter_final)):
 		a=inter_final[i][0]
 		p=inter_final[i][1]
-		b=hits.get(a+' '+p)
-		v=vols.get(a+' '+p)
+		b=hits.get(f'{a} {p}')
+		v=vols.get(f'{a} {p}')
 		c=float(inter_final[i][4])/float(vline)
 		d=inter_final[i][4]
 		out=f"{a:<6}{p:<7}{vline:{12}.{8}}{v:{12}.{8}} {d:{9}.{7}} {c:{6}.{3}}    {b}\n"
@@ -118,4 +134,3 @@ with open('../winners/master_scorefile.txt', mode) as f:
 		dp=f'{s[i][5]:{7}.{3}}'
 		h=f'{s[i][6]:<6}'
 		f.write(pdb+pock+v1+v2+d+dp+h+'\n')
-
