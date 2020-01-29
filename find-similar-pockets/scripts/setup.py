@@ -28,6 +28,7 @@ tr = 2 #input()
 #initialized arrays to be used in the following script
 surf='/home/matt/Software/VASPreleasePack/codeRelease/surfProcessingRelease/debug/surfProcessing'
 rotates = int(360/float(deg1))
+conformations = [-30,0,30,150,180,210]
 pocket=[]
 vec_residues=[]
 
@@ -94,11 +95,10 @@ def align(array,residues):
 	return aligned
 
 
-#######make this -30,0,30 150,180,210
 #conformation generation/flow control function
 def conformation(array):
-	for i in range(rotates):
-		deg = i*int(deg1)
+	for i in range(len(conformations)):
+		deg = conformations[i]
 		conform = R.from_euler('z',deg,degrees=True)
 		conformation = conform.apply(array)
 		make_pdb(conformation,f'conf{i}',0,0,0,0)

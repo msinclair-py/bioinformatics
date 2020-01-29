@@ -38,7 +38,7 @@ for entry in name_array:
 		j=i+1
 		a = pock_array.count(j)
 		if a < cutoff:
-			with open('../PDB/'+entry[3:7]+'_pock'+str(j)+'.pdb', 'w') as outfile:
+			with open(f'../PDB/{entry.split("_")[0]}_pock{j}.pdb', 'w') as outfile:
 				for line in pock_array:
 					if line.split()[5] == uniq[i]:
 						outfile.write(line)
