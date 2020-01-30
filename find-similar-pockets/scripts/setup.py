@@ -20,7 +20,7 @@ pocknumber = '1' #input()
 print('How many degrees would you like to rotate about z?')
 deg1 = '30' #input()
 print('How many degrees would you like to tilt by?')
-deg2 = '20' #input()
+deg2 = '10' #input()
 print('How many angstroms would you like to translate by?')
 tr = 2 #input()
 
@@ -54,6 +54,13 @@ def initialize (array):
 	temp = np.where(D == D.max())
 	return temp[0]
 
+def principal (array):
+	inertia = array.T @ array
+	e_values, e_vectors = np.linalg.eig(inertia)
+	order = np.argsort(e_values)
+	eval3,eval2,eval1 = e_values[order]
+	axis3,axis2,axis1 = e_vectors[:,order].T
+	return axis1
 
 #centers the coordinate array
 def center(array):
@@ -66,33 +73,18 @@ def center(array):
 
 
 #aligns the longest axis to the z axis
-def align(array,residues):
+def align(array,a):
 	aligned = np.zeros((array.shape[0],array.shape[1]))
-	res1 = residues[0]
-	res2 = residues[1]
-	c1 = array[res1]
-	c2 = array[res2]
-	b = np.array([0,0,1])
-
-	d = math.sqrt((c1[0]-c2[0])**2+(c1[1]-c2[1])**2+(c1[2]-c2[2])**2)
-	norm = np.array([(c2[0]-c1[0])/d, (c2[1]-c1[1])/d, (c2[2]-c1[2])/d])
 
 	#compute rotation angles theta, psi and phi by using trig on 2d projections
-	xyprojection = np.array([norm[0], norm[1], 0])
-	xzprojection = np.array([norm[0], 0, norm[2]])
-	yzprojection = np.array([0, norm[1], norm[2]])
-	theta = np.arccos(np.dot(xyprojection,[0,1,0]))
-	psi = np.arccos(np.dot(xzprojection,[1,0,0]))
-	phi = np.arccos(np.dot(yzprojection,[0,0,1]))
-	rot_theta = R.from_euler('z',theta,degrees=False)
-	rot_psi = R.from_euler('y',psi,degrees=False)
-	rot_phi = R.from_euler('x',phi,degrees=False)
-
-	al1 = rot_theta.apply(array)
-	al2 = rot_psi.apply(al1)
-	aligned = rot_phi.apply(al2)
-
-	return aligned
+	b = [0,0,1]
+	v = np.cross(a,b)
+	c = np.dot(a,b)
+	I = np.eye(3,3)
+	vx = np.array([[0,-v[2],v[1]],[v[2],0,-v[0]],[-v[1],v[0],0]])
+	R = I + vx + (vx @ vx)/(1+c)
+	aligned = R @ array.T
+	return aligned.T
 
 
 #conformation generation/flow control function
@@ -188,8 +180,8 @@ initcoords = np.genfromtxt(f'../initial_structures/{pdb}.pocket.pdb',
 	dtype=float, usecols=(6,7,8))
 
 cent = center(initcoords)
-vec_residues = initialize(cent)
-aligned_coords = align(cent, vec_residues)
+vector = principal(cent)
+aligned_coords = align(cent,vector)
 
 #run rotations, the conformation function orchestrates the order of operations
 conformation(aligned_coords)
